@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Каталог сертифікатів</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Фоновое свечение -->
+    <div class="background">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="glass header">
+
+        <div class="header-left">
+
+            <div class="logo">
+                <span class="logo-icon">✓</span>
+
+                <div>
+                    <h1>Каталог сертифікатів</h1>
+                    <p>Технічна документація</p>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="header-right">
+
+            <button
+                class="glass-button"
+                id="addCertificateButton"
+            >
+                <span>＋</span>
+                Додати сертифікат
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="container">
+
+
+        <!-- ================= TOOLBAR ================= -->
+
+        <section class="glass toolbar">
+
+            <div class="search-box">
+
+                <span class="search-icon">⌕</span>
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Пошук сертифіката..."
+                >
+
+            </div>
+
+
+            <div class="filter-box">
+
+                <select id="statusFilter">
+
+                    <option value="all">
+                        Усі статуси
+                    </option>
+
+                    <option value="valid">
+                        Чинний
+                    </option>
+
+                    <option value="warning">
+                        Закінчується
+                    </option>
+
+                    <option value="expired">
+                        Прострочений
+                    </option>
+
+                    <option value="draft">
+                        Чернетка
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="certificate-counter">
+
+                <span id="certificateCount">
+                    0 сертифікатів
+                </span>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= CONTENT ================= -->
+
+        <section id="certificatesContainer" class="certificates-grid">
+
+            <!--
+                Карточки сертификатов
+                будут автоматически создаваться через JavaScript
+            -->
+
+        </section>
+
+
+
+        <!-- ================= EMPTY STATE ================= -->
+
+        <section
+            id="emptyState"
+            class="glass empty-state"
+            style="display: none;"
+        >
+
+            <div class="empty-icon">
+                📄
+            </div>
+
+            <h2>
+                Сертифікатів не знайдено
+            </h2>
+
+            <p>
+                Додайте перший сертифікат або змініть параметри пошуку.
+            </p>
+
+            <button
+                class="glass-button"
+                id="emptyAddButton"
+            >
+                ＋ Додати сертифікат
+            </button>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- ================================================= -->
+    <!--                  MODAL EDITOR                     -->
+    <!-- ================================================= -->
+
+    <div
+        id="certificateModal"
+        class="modal-overlay"
+        style="display: none;"
+    >
+
+        <div class="glass modal">
+
+            <button
+                class="modal-close"
+                id="closeModalButton"
+            >
+                ×
+            </button>
+
+
+            <div class="modal-header">
+
+                <div class="modal-icon">
+                    📄
+                </div>
+
+                <div>
+
+                    <div class="eyebrow">
+                        CERTIFICATE
+                    </div>
+
+                    <h2 id="modalTitle">
+                        Додати сертифікат
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ================= FORM ================= -->
+
+            <form id="certificateForm">
+
+
+                <!-- ID -->
+                <input
+                    type="hidden"
+                    id="certificateId"
+                >
+
+
+                <!-- Название -->
+
+                <div class="form-group">
+
+                    <label for="certificateName">
+                        Назва сертифіката
+                    </label>
+
+                    <input
+                        type="text"
+                        id="certificateName"
+                        placeholder="Наприклад: Клапани SED EI 90"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- Серия + оборудование -->
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="certificateSeries">
+                            Серія / модель
+                        </label>
+
+                        <input
+                            type="text"
+                            id="certificateSeries"
+                            placeholder="SED EI 90"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="certificateEquipment">
+                            Обладнання
+                        </label>
+
+                        <input
+                            type="text"
+                            id="certificateEquipment"
+                            placeholder="Протипожежні клапани"
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Даты -->
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="certificateIssued">
+                            Дата видачі
+                        </label>
+
+                        <input
+                            type="date"
+                            id="certificateIssued"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="certificateExpires">
+                            Дійсний до
+                        </label>
+
+                        <input
+                            type="date"
+                            id="certificateExpires"
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Статус -->
+
+                <div class="form-group">
+
+                    <label for="certificateStatus">
+                        Статус
+                    </label>
+
+                    <select id="certificateStatus">
+
+                        <option value="valid">
+                            ✓ Чинний
+                        </option>
+
+                        <option value="warning">
+                            ⚠ Закінчується
+                        </option>
+
+                        <option value="expired">
+                            ✕ Прострочений
+                        </option>
+
+                        <option value="draft">
+                            ◌ Чернетка
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- Заметки -->
+
+                <div class="form-group">
+
+                    <label for="certificateNotes">
+                        Додаткова інформація
+                    </label>
+
+                    <textarea
+                        id="certificateNotes"
+                        rows="5"
+                        placeholder="Напишіть тут будь-яку інформацію про сертифікат..."
+                    ></textarea>
+
+                </div>
+
+
+
+                <!-- PDF -->
+
+                <div class="form-group">
+
+    <label for="certificatePdf">
+        PDF-файл
+    </label>
+
+    <input
+        type="file"
+        id="certificatePdf"
+        accept="application/pdf"
+    >
+
+    <div
+        id="currentPdf"
+        class="current-pdf"
+        style="display: none;"
+    >
+        <span>📄</span>
+        <span id="currentPdfName"></span>
+
+        <button
+            type="button"
+            id="removePdfButton"
+            class="remove-pdf-button"
+        >
+            Видалити PDF
+        </button>
+    </div>
+
+    <div class="input-hint">
+        Виберіть PDF-файл зі свого комп'ютера.
+    </div>
+
+</div>
+
+
+
+                <!-- Кнопки -->
+
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        class="glass-button secondary"
+                        id="cancelButton"
+                    >
+                        Скасувати
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="glass-button primary"
+                    >
+                        Зберегти
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================================================= -->
+    <!--              PDF PREVIEW MODAL                    -->
+    <!-- ================================================= -->
+
+    <div
+        id="pdfModal"
+        class="modal-overlay"
+        style="display: none;"
+    >
+
+        <div class="glass pdf-modal">
+
+            <div class="pdf-modal-header">
+
+                <div>
+
+                    <div class="eyebrow">
+                        DOCUMENT
+                    </div>
+
+                    <h2 id="pdfModalTitle">
+                        Сертифікат
+                    </h2>
+
+                </div>
+
+
+                <button
+                    class="modal-close"
+                    id="closePdfButton"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="pdf-viewer">
+
+                <iframe
+                    id="pdfViewer"
+                    src=""
+                    title="PDF документ"
+                ></iframe>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================================================= -->
+    <!--                    JAVASCRIPT                     -->
+    <!-- ================================================= -->
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
